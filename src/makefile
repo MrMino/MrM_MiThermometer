@@ -4,7 +4,7 @@ LIBS :=  -llt_8258
 
 TEL_PATH ?= ../..
 
-PROJECT_NAME := ATC_Thermometer
+PROJECT_NAME := mrm_mi_fw
 
 PROJECT_PATH := .
 OUT_PATH :=$(PROJECT_PATH)/out

@@ -9,7 +9,7 @@
 
 #include "ble.h"
 #include "lcd.h"
-#include "flash.h"
+#include "settings.h"
 
 RAM	uint8_t	ble_connected = 0;
 
@@ -137,9 +137,8 @@ bool ble_get_connected(){
 	return ble_connected;
 }
 
-extern settings_struct settings;//Custom or Mi Advertising
 void set_adv_data(int16_t temp, uint16_t humi, uint8_t battery_level, uint16_t battery_mv){
-	if(settings.advertising_type){//Mi Like Advertising
+	if(CONF_ADV_FORMAT){//Mi Like Advertising
 		humi = humi * 10;
 		
 		advertising_data_Mi[8]++;

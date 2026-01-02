@@ -6,9 +6,9 @@
 
 #include "battery.h"
 #include "ble.h"
-#include "flash.h"
 #include "lcd.h"
 #include "sensor.h"
+#include "settings.h"
 
 
 
@@ -23,9 +23,6 @@ RAM uint16_t last_humi;
 RAM uint8_t battery_level;
 RAM uint16_t battery_mv;
 RAM bool show_batt_or_humi;
-
-//Settings
-extern settings_struct settings;
 
 RAM int16_t comfort_x[] = {2000, 2560, 2700, 2500, 2050, 1700, 1600, 1750};
 RAM uint16_t comfort_y[] = {2000, 1980, 3200, 6000, 8200, 8600, 7700, 3800};
@@ -74,14 +71,14 @@ void main_loop(){
 			last_battery_delay = clock_time();
 		}
 
-		if(meas_count >= settings.measure_interval){
+		if(meas_count >= CONF_MEASUREMENT_ITERATIONS){
 			read_sensor(&temp,&humi);		
-			temp += settings.temp_offset;
-			humi += settings.humi_offset;
+			temp += CONF_TEMP_OFFSET;
+			humi += CONF_HUMI_OFFSET;
 			meas_count=0;
 		
-			if((temp-last_temp > settings.temp_alarm_point)||(last_temp-temp > settings.temp_alarm_point)||(humi-last_humi > settings.humi_alarm_point)||(last_humi-humi > settings.humi_alarm_point)){// instant advertise on to much sensor difference
-				if(settings.advertising_temp_C_or_F)
+			if((temp-last_temp > CONF_TEMP_ALARM)||(last_temp-temp > CONF_TEMP_ALARM)||(humi-last_humi > CONF_HUMI_ALARM)||(last_humi-humi > CONF_HUMI_ALARM)){// instant advertise on to much sensor difference
+				if(CONF_ADV_TEMP_C_OR_F)
 					set_adv_data(((((temp*10)/5)*9)+3200)/10, humi, battery_level, battery_mv);
 				else
 					set_adv_data(temp, humi, battery_level, battery_mv);
@@ -91,7 +88,7 @@ void main_loop(){
 		}	
 		meas_count++;
 		
-		if(settings.temp_C_or_F){
+		if(CONF_LCD_TEMP_C_OR_F){
 			show_temp_symbol(2);
 			show_big_number(((((last_temp*10)/5)*9)+3200)/10,1);//convert C to F
 		}else{
@@ -99,7 +96,7 @@ void main_loop(){
 			show_big_number(last_temp,1);
 		}
 
-		if(!settings.show_batt_enabled) show_batt_or_humi = true;
+		if(!CONF_LCD_BATTERY_INDICATOR) show_batt_or_humi = true;
 		
 		if(show_batt_or_humi){//Change between Humidity displaying and battery level if show_batt_enabled=true
 			show_small_number(last_humi,1);	
@@ -117,9 +114,9 @@ void main_loop(){
 			ble_send_battery(battery_level);
 		}
 
-		if((clock_time() - last_adv_delay) > (settings.advertising_type?5000:10000)*CLOCK_SYS_CLOCK_1MS){//Advetise data delay
-		    if(adv_count >= settings.advertising_interval){
-				if(settings.advertising_temp_C_or_F)
+		if((clock_time() - last_adv_delay) > (CONF_ADV_FORMAT?5000:10000)*CLOCK_SYS_CLOCK_1MS){//Advetise data delay
+		    if(adv_count >= CONF_ADV_ITERATIONS){
+				if(CONF_ADV_TEMP_C_OR_F)
 					set_adv_data(((((last_temp*10)/5)*9)+3200)/10, last_humi, battery_level, battery_mv);
 				else
 					set_adv_data(last_temp, last_humi, battery_level, battery_mv);
@@ -129,7 +126,7 @@ void main_loop(){
 		    adv_count++;
 		}
 		
-		if(settings.comfort_smiley) {
+		if(CONF_LCD_SHOW_COMFORT_SMILEY) {
 			if(is_comfort(last_temp * 10, last_humi * 100)){
 				show_smiley(1);
 			} else {
@@ -137,7 +134,7 @@ void main_loop(){
 			}
 		}
 
-		if(settings.blinking_smiley){//If Smiley should blink do it
+		if(CONF_LCD_BLINKING_SMILEY){//If Smiley should blink do it
 		last_smiley=!last_smiley;
 		show_smiley(last_smiley);
 		}

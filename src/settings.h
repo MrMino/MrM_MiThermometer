@@ -22,7 +22,7 @@
 
 // Measurement interval - number of main loop iterations between sensor
 // measurements
-#define CONF_MEASUREMENT_ITERATIONS 4
+#define CONF_MEASUREMENT_ITERATIONS 8
 
 // Temperature and humidity offsets - values that will be added to the sensor
 // measurements. Use to callibrate the sensors if needed.

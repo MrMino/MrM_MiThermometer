@@ -24,7 +24,22 @@ This is the link to the donations atc1441 had in their repo:
 The original firmware a cool piece of hardware reverse engineering. Consider
 kicking a buck to atc1441 if you find the code here valuable.
 
-## Making the software
+## Changes from the atc1441 version:
+
+Most of the changes are made in the interest of making the FW less cumbersome
+to inspect and modify.
+
+- Added BTHome v2 advertisement format.
+- Made all settings constant & compile-time.
+- Added FW version screen (shown after boot).
+- Removed OTA updates.
+- Removed RxTx ATT service (settings update OTA).
+- Removed the "smiley face" from LCD (cause it's janky).
+- Better & cleaner Python flasher.
+- BLEMonitor script.
+- Codebase cleanup.
+
+## Building the software
 
 All you need `docker` and `make`. Go to the root of the repo, execute `make`
 (the command).

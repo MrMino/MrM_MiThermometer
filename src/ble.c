@@ -13,9 +13,9 @@
 
 RAM uint8_t ble_connected = 0;
 
-extern uint8_t my_tempVal[2];
-extern uint8_t my_humiVal[2];
-extern uint8_t my_batVal[1];
+extern uint8_t tempVal[2];
+extern uint8_t humiVal[2];
+extern uint8_t batVal[1];
 
 RAM uint8_t ble_name[] = {11, 0x09, 'M', 'r', 'M', '_', '0', '0', '0', '0', '0', '0'};
 
@@ -210,19 +210,19 @@ void set_adv_data(int16_t temp, uint16_t humi, uint8_t battery_level, uint16_t b
 }
 
 void ble_send_temp(uint16_t temp){
-    my_tempVal[0] = temp & 0xFF;
-    my_tempVal[1] = temp >> 8;
-    bls_att_pushNotifyData(TEMP_LEVEL_INPUT_DP_H, my_tempVal, 2);
+    tempVal[0] = temp & 0xFF;
+    tempVal[1] = temp >> 8;
+    bls_att_pushNotifyData(TEMP_LEVEL_INPUT_DP_H, tempVal, 2);
 }
 
 void ble_send_humi(uint16_t humi){
     humi*=100;
-    my_humiVal[0] = humi & 0xFF;
-    my_humiVal[1] = humi >> 8;
-    bls_att_pushNotifyData(HUMI_LEVEL_INPUT_DP_H, (uint8_t *)my_humiVal, 2);
+    humiVal[0] = humi & 0xFF;
+    humiVal[1] = humi >> 8;
+    bls_att_pushNotifyData(HUMI_LEVEL_INPUT_DP_H, (uint8_t *)humiVal, 2);
 }
 
 void ble_send_battery(uint8_t value){
-    my_batVal[0] = value;
-    bls_att_pushNotifyData(BATT_LEVEL_INPUT_DP_H, (uint8_t *)my_batVal, 1);
+    batVal[0] = value;
+    bls_att_pushNotifyData(BATT_LEVEL_INPUT_DP_H, (uint8_t *)batVal, 1);
 }

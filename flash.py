@@ -269,6 +269,7 @@ def main(argv: list[str]) -> None:
 
     args = cli.parse_args(argv)
 
+    print(f"Using port: {args.port}")
     sc = SwsUart(port=args.port, baudrate=args.baud)
 
     try:

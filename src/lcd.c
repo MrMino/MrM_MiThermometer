@@ -132,13 +132,6 @@ void show_temp_symbol(uint8_t symbol){/*1 = C, 2 = F*/
     else if (symbol==2)display_buff[2]|=0x60;
 }
 
-void show_ble_symbol(bool state){
-    if (state)
-        display_buff[2] |= 0x10;
-    else
-        display_buff[2] &= ~0x10;
-}
-
 void show_battery_symbol(bool state){
     if (state)
         display_buff[1] |= 0x08;

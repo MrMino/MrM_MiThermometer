@@ -1,6 +1,5 @@
 OBJS += \
 $(OUT_PATH)/app.o \
-$(OUT_PATH)/app_att.o \
 $(OUT_PATH)/battery.o \
 $(OUT_PATH)/ble.o \
 $(OUT_PATH)/i2c.o \

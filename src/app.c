@@ -88,12 +88,6 @@ void main_loop(){
 
         show_batt_or_humi = !show_batt_or_humi;
 
-        if (ble_get_connected()){
-            ble_send_temp(last_temp);
-            ble_send_humi(last_humi);
-            ble_send_battery(battery_level);
-        }
-
         update_lcd();
         last_delay = clock_time();
     }

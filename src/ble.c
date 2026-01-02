@@ -130,8 +130,8 @@ void init_ble(){
 
     // Host Initialization
     blc_gap_peripheral_init();
-    extern void my_att_init();
-    my_att_init ();
+    extern void att_init();
+    att_init();
     blc_l2cap_register_handler (blc_l2cap_packet_receive);
     blc_smp_setSecurityLevel(No_Security);
 

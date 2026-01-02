@@ -56,13 +56,6 @@ typedef enum
 	HUMI_LEVEL_INPUT_DP_H,					//UUID: 2A19 	VALUE: humiVal
 	HUMI_LEVEL_INPUT_CCB_H,					//UUID: 2902, 	VALUE: humiValCCC
 
-	//// Ota ////
-	/**********************************************************************************************/
-	OTA_PS_H, 								//UUID: 2800, 	VALUE: telink ota service uuid
-	OTA_CMD_OUT_CD_H,						//UUID: 2803, 	VALUE:  			Prop: read | write_without_rsp
-	OTA_CMD_OUT_DP_H,						//UUID: telink ota uuid,  VALUE: otaData
-	OTA_CMD_OUT_DESC_H,						//UUID: 2901, 	VALUE: otaName
-
 	//// RxTx ////
 	/**********************************************************************************************/
 	RxTx_PS_H, 								//UUID: , 	VALUE: RxTx service uuid

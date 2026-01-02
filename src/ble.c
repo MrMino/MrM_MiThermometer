@@ -49,15 +49,6 @@ RAM uint8_t	advertising_data[] = {
 
 uint8_t mac_public[6];
 	
-uint8_t ota_is_working = 0;
-
-void app_enter_ota_mode(void)
-{
-	ota_is_working = 1;
-	bls_ota_setTimeout(5 * 1000000);
-	show_smiley(1);
-}
-
 void app_switch_to_indirect_adv(uint8_t e, uint8_t *p, int n)
 {
 	bls_ll_setAdvParam( ADVERTISING_INTERVAL, ADVERTISING_INTERVAL+50, ADV_TYPE_CONNECTABLE_UNDIRECTED, OWN_ADDRESS_PUBLIC, 0,  NULL, BLT_ENABLE_ADV_ALL, ADV_FP_NONE);
@@ -84,14 +75,6 @@ void ble_connect_callback(uint8_t e, uint8_t *p, int n)
 	update_lcd();
 }
 
-extern u32 blt_ota_start_tick;
-int otaWritePre(void * p)
-{
-	blt_ota_start_tick = clock_time()|1;
-	otaWrite(p);
-	return 0;
-}
-
 int RxTxWrite(void * p)
 {
 	cmd_parser(p);
@@ -100,12 +83,7 @@ int RxTxWrite(void * p)
 
 _attribute_ram_code_ void blt_pm_proc(void)
 {
-	if(ota_is_working){
-		bls_pm_setSuspendMask(SUSPEND_DISABLE);
-		bls_pm_setManualLatency(0);
-	}else{
-		bls_pm_setSuspendMask (SUSPEND_ADV | DEEPSLEEP_RETENTION_ADV | SUSPEND_CONN | DEEPSLEEP_RETENTION_CONN);
-	}
+    bls_pm_setSuspendMask (SUSPEND_ADV | DEEPSLEEP_RETENTION_ADV | SUSPEND_CONN | DEEPSLEEP_RETENTION_CONN);
 }
 
 void init_ble(){
@@ -166,9 +144,6 @@ void init_ble(){
 	blc_pm_setDeepsleepRetentionThreshold(95, 95);
 	blc_pm_setDeepsleepRetentionEarlyWakeupTiming(240);
 	blc_pm_setDeepsleepRetentionType(DEEPSLEEP_MODE_RET_SRAM_LOW32K);
-
-	bls_ota_clearNewFwDataArea(); //must
-	bls_ota_registerStartCmdCb(app_enter_ota_mode);	
 }
 
 bool ble_get_connected(){

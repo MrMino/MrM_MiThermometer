@@ -51,12 +51,6 @@ RAM u8 my_tempVal[2] = {0};
 static u8 humiValueInCCC[2];
 RAM u8 my_humiVal[2] = {0};
 
-// OTA
-static const u8 my_OtaUUID[16] = TELINK_SPP_DATA_OTA;
-static const u8 my_OtaServiceUUID[16] = TELINK_OTA_UUID_SERVICE;
-static u8 my_OtaData = 0x00;
-static const u8 my_OtaName[] = {'O', 'T', 'A'};
-
 // RxTx Char
 static const u16 my_RxTxUUID = 0x1f1f;
 static const u16 my_RxTx_ServiceUUID = 0x1f10;
@@ -116,14 +110,6 @@ static const u8 my_humiCharVal[5] = {
     U16_LO(0x2A6F), U16_HI(0x2A6F)
 };
 
-// OTA attribute values
-#define TELINK_SPP_DATA_OTA1 0x12, 0x2B, 0x0d, 0x0c, 0x0b, 0x0a, 0x09, 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00
-static const u8 my_OtaCharVal[19] = {
-    CHAR_PROP_READ | CHAR_PROP_WRITE_WITHOUT_RSP,
-    U16_LO(OTA_CMD_OUT_DP_H), U16_HI(OTA_CMD_OUT_DP_H),
-    TELINK_SPP_DATA_OTA1,
-};
-
 // RxTx attribute values
 static const u8 my_RxTxCharVal[5] = {
     CHAR_PROP_NOTIFY | CHAR_PROP_WRITE_WITHOUT_RSP,
@@ -131,7 +117,6 @@ static const u8 my_RxTxCharVal[5] = {
     U16_LO(0x1f1f), U16_HI(0x1f1f)
 };
 
-extern int otaWritePre(void * p);
 extern int RxTxWrite(void * p);
 static const attribute_t my_Attributes[] = {
     {ATT_END_H - 1, 0, 0, 0, 0, 0},	// total num of attribute
@@ -162,11 +147,6 @@ static const attribute_t my_Attributes[] = {
     {0, ATT_PERMISSIONS_READ, 2, sizeof(my_humiCharVal),(u8*)(&my_characterUUID), (u8*)(my_humiCharVal), 0},
     {0, ATT_PERMISSIONS_READ, 2, sizeof(my_humiVal),(u8*)(&my_humiCharUUID), (u8*)(my_humiVal), 0},
     {0, ATT_PERMISSIONS_RDWR, 2, sizeof(humiValueInCCC),(u8*)(&clientCharacterCfgUUID), (u8*)(humiValueInCCC), 0},
-    // OTA
-    {4, ATT_PERMISSIONS_READ, 2, 16,(u8*)(&my_primaryServiceUUID), (u8*)(&my_OtaServiceUUID), 0},
-    {0, ATT_PERMISSIONS_READ, 2, sizeof(my_OtaCharVal),(u8*)(&my_characterUUID), (u8*)(my_OtaCharVal), 0},
-    {0, ATT_PERMISSIONS_RDWR, 16, sizeof(my_OtaData),(u8*)(&my_OtaUUID),(&my_OtaData), &otaWritePre, &otaRead},
-    {0, ATT_PERMISSIONS_READ, 2, sizeof(my_OtaName),(u8*)(&userdesc_UUID), (u8*)(my_OtaName), 0},
     // RxTx Communication
     {4, ATT_PERMISSIONS_READ, 2, 2,(u8*)(&my_primaryServiceUUID), (u8*)(&my_RxTx_ServiceUUID), 0},
     {0, ATT_PERMISSIONS_READ, 2, sizeof(my_RxTxCharVal),(u8*)(&my_characterUUID), (u8*)(my_RxTxCharVal), 0},

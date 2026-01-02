@@ -11,16 +11,6 @@
 // 1 - Fahrenheit
 #define CONF_ADV_TEMP_C_OR_F 0
 
-// Blinking smiley - toggle LCD smiley face on each iteration
-// 0 - Not blinking
-// 1 - Blinking
-#define CONF_LCD_BLINKING_SMILEY 0
-
-// Show confort smiley
-// 0 - Do not show the comfort smiley
-// 1 - Comfort smiley functionality similar to the stock FW
-#define CONF_LCD_SHOW_COMFORT_SMILEY 0
-
 // Show battery level on LCD on every other iteration
 // 0 - Do not show battery level; indicator always shows humidity
 // 1 - Alternate humidity and battery levels on LCD

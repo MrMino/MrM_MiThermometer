@@ -25,23 +25,6 @@ RAM bool show_batt_or_humi;
 RAM int16_t comfort_x[] = {2000, 2560, 2700, 2500, 2050, 1700, 1600, 1750};
 RAM uint16_t comfort_y[] = {2000, 1980, 3200, 6000, 8200, 8600, 7700, 3800};
 
-_attribute_ram_code_ bool is_comfort(int16_t t, uint16_t h) {
-    bool c = 0;
-    uint8_t npol = sizeof(comfort_x) / sizeof(comfort_x[0]);
-    for (uint8_t i = 0, j = npol - 1; i < npol; j = i++)
-    {
-      if ((
-        (comfort_y[i] < comfort_y[j]) && (comfort_y[i] < h) && (h <= comfort_y[j]) &&
-        ((comfort_y[j] - comfort_y[i]) * (t - comfort_x[i]) > (comfort_x[j] - comfort_x[i]) * (h - comfort_y[i]))
-      ) || (
-        (comfort_y[i] > comfort_y[j]) && (comfort_y[j] < h) && (h <= comfort_y[i]) &&
-        ((comfort_y[j] - comfort_y[i]) * (t - comfort_x[i]) < (comfort_x[j] - comfort_x[i]) * (h - comfort_y[i]))
-      ))
-        c = !c;
-    }
-    return c;
-}
-
 void user_init_normal(void){
     random_generator_init();
     init_ble();
@@ -122,19 +105,6 @@ void main_loop(){
             adv_count=0;
             }
             adv_count++;
-        }
-
-        if (CONF_LCD_SHOW_COMFORT_SMILEY) {
-            if (is_comfort(last_temp * 10, last_humi * 100)){
-                show_smiley(1);
-            } else {
-                show_smiley(2);
-            }
-        }
-
-        if (CONF_LCD_BLINKING_SMILEY){
-            last_smiley=!last_smiley;
-            show_smiley(last_smiley);
         }
 
         update_lcd();

@@ -40,6 +40,26 @@ RAM uint8_t advertising_data[] = {
     0x00  // Counter
 };
 
+// BTHome v2 (unencrypted) ADV
+// Includes Flags (recommended) + Service Data (UUID 0xFCD2)
+//
+// Objects (in required numeric order):
+// 0x00 packet id (uint8)            (optional but useful)
+// 0x01 battery % (uint8)
+// 0x02 temperature (sint16, 0.01°C)
+// 0x03 humidity (uint16, 0.01%)
+// 0x0C voltage (uint16, 0.001V)     (battery_mv fits perfectly: mV -> factor 0.001V)
+RAM uint8_t advertising_data_BTHome[] = {
+    0x02, 0x01, 0x06,  // Flags
+    0x11, 0x16, 0xD2, 0xFC,  // Service Data: len=0x11, type=0x16, UUID=0xFCD2 (D2 FC)
+    0x40,  // Device Info: 0x40 = BTHome v2, unencrypted, regular interval
+    0x00, 0x00,  // 0x00 packet id (optional)
+    0x01, 0x00,  // 0x01 battery (%)
+    0x02, 0x00, 0x00,  // 0x02 temperature (0.01°C, little-endian)
+    0x03, 0x00, 0x00,  // 0x03 humidity (0.01%, little-endian)
+    0x0C, 0x00, 0x00,  // 0x0C voltage (0.001V, little-endian) -> battery_mv in mV
+};
+
 uint8_t mac_public[6];
 
 void app_switch_to_indirect_adv(uint8_t e, uint8_t *p, int n)
@@ -148,7 +168,6 @@ void set_adv_data(int16_t temp, uint16_t humi, uint8_t battery_level, uint16_t b
         if (show_temp_humi_Mi){
             advertising_data_Mi[15] = 0x0d;
             advertising_data_Mi[17] = 0x04;
-
             advertising_data_Mi[18] = temp&0xff;
             advertising_data_Mi[19] = temp>>8;
             advertising_data_Mi[20] = humi&0xff;
@@ -156,7 +175,6 @@ void set_adv_data(int16_t temp, uint16_t humi, uint8_t battery_level, uint16_t b
         }else{
             advertising_data_Mi[15] = 0x0a;
             advertising_data_Mi[17] = 0x01;
-
             advertising_data_Mi[18] = battery_level;
             advertising_data_Mi[19] = 0x00;
             advertising_data_Mi[20] = 0x00;
@@ -168,14 +186,10 @@ void set_adv_data(int16_t temp, uint16_t humi, uint8_t battery_level, uint16_t b
     }else if (CONF_ADV_FORMAT == ADV_FORMAT_CUSTOM_ATC){
         advertising_data[10] = temp>>8;
         advertising_data[11] = temp&0xff;
-
         advertising_data[12] = humi&0xff;
-
         advertising_data[13] = battery_level;
-
         advertising_data[14] = battery_mv>>8;
         advertising_data[15] = battery_mv&0xff;
-
         advertising_data[16]++;
 
         bls_ll_setAdvData((uint8_t *)advertising_data, sizeof(advertising_data));

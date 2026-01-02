@@ -56,13 +56,6 @@ typedef enum
 	HUMI_LEVEL_INPUT_DP_H,					//UUID: 2A19 	VALUE: humiVal
 	HUMI_LEVEL_INPUT_CCB_H,					//UUID: 2902, 	VALUE: humiValCCC
 
-	//// RxTx ////
-	/**********************************************************************************************/
-	RxTx_PS_H, 								//UUID: , 	VALUE: RxTx service uuid
-	RxTx_CMD_OUT_CD_H,						//UUID: , 	VALUE:  			Prop: read | write_without_rsp
-	RxTx_CMD_OUT_DP_H,						//UUID: RxTx uuid,  VALUE: RxTxData
-	RxTx_CMD_OUT_DESC_H,						//UUID: 2901, 	VALUE: RxTxName
-	
 	// Mi Advertising char
 	Mi_PS_H, 								//UUID: , 	VALUE: 0xFE95 service uuid
 	Mi_CMD_OUT_DESC_H,						//UUID: 2901, 	VALUE: Miname

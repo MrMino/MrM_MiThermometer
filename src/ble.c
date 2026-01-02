@@ -8,7 +8,6 @@
 #include "vendor/common/blt_common.h"
 
 #include "ble.h"
-#include "cmd_parser.h"
 #include "lcd.h"
 #include "flash.h"
 
@@ -17,12 +16,6 @@ RAM	uint8_t	ble_connected = 0;
 extern uint8_t my_tempVal[2];
 extern uint8_t my_humiVal[2];
 extern uint8_t my_batVal[1];
-
-RAM uint8_t 		 	blt_rxfifo_b[64 * 8] = {0};
-RAM	my_fifo_t	blt_rxfifo = { 64, 8, 0, 0, blt_rxfifo_b,};
-
-RAM uint8_t 			blt_txfifo_b[40 * 16] = {0};
-RAM	my_fifo_t	blt_txfifo = { 40, 16, 0, 0, blt_txfifo_b,};
 
 RAM uint8_t	ble_name[] = {11, 0x09, 'A', 'T', 'C', '_', '0', '0', '0', '0', '0', '0'};
 
@@ -73,12 +66,6 @@ void ble_connect_callback(uint8_t e, uint8_t *p, int n)
 	bls_l2cap_requestConnParamUpdate (8, 8, 99, 400);  //1S
 	show_ble_symbol(1);
 	update_lcd();
-}
-
-int RxTxWrite(void * p)
-{
-	cmd_parser(p);
-	return 0;
 }
 
 _attribute_ram_code_ void blt_pm_proc(void)

@@ -51,12 +51,6 @@ RAM u8 my_tempVal[2] = {0};
 static u8 humiValueInCCC[2];
 RAM u8 my_humiVal[2] = {0};
 
-// RxTx Char
-static const u16 my_RxTxUUID = 0x1f1f;
-static const u16 my_RxTx_ServiceUUID = 0x1f10;
-static u8 my_RxTx_Data = 0x00;
-static u8 RxTxValueInCCC[2];
-
 //0x95FE
 static const u16 my_FE95_ServiceUUID = 0xFE95;
 static const u8 my_MiName[] = {'M', 'i'};
@@ -110,14 +104,6 @@ static const u8 my_humiCharVal[5] = {
     U16_LO(0x2A6F), U16_HI(0x2A6F)
 };
 
-// RxTx attribute values
-static const u8 my_RxTxCharVal[5] = {
-    CHAR_PROP_NOTIFY | CHAR_PROP_WRITE_WITHOUT_RSP,
-    U16_LO(RxTx_CMD_OUT_DP_H), U16_HI(RxTx_CMD_OUT_DP_H),
-    U16_LO(0x1f1f), U16_HI(0x1f1f)
-};
-
-extern int RxTxWrite(void * p);
 static const attribute_t my_Attributes[] = {
     {ATT_END_H - 1, 0, 0, 0, 0, 0},	// total num of attribute
     // 0001 - 0007 gap
@@ -147,11 +133,6 @@ static const attribute_t my_Attributes[] = {
     {0, ATT_PERMISSIONS_READ, 2, sizeof(my_humiCharVal),(u8*)(&my_characterUUID), (u8*)(my_humiCharVal), 0},
     {0, ATT_PERMISSIONS_READ, 2, sizeof(my_humiVal),(u8*)(&my_humiCharUUID), (u8*)(my_humiVal), 0},
     {0, ATT_PERMISSIONS_RDWR, 2, sizeof(humiValueInCCC),(u8*)(&clientCharacterCfgUUID), (u8*)(humiValueInCCC), 0},
-    // RxTx Communication
-    {4, ATT_PERMISSIONS_READ, 2, 2,(u8*)(&my_primaryServiceUUID), (u8*)(&my_RxTx_ServiceUUID), 0},
-    {0, ATT_PERMISSIONS_READ, 2, sizeof(my_RxTxCharVal),(u8*)(&my_characterUUID), (u8*)(my_RxTxCharVal), 0},
-    {0, ATT_PERMISSIONS_WRITE, 2, sizeof(my_RxTx_Data),(u8*)(&my_RxTxUUID),(&my_RxTx_Data), &RxTxWrite},
-    {0, ATT_PERMISSIONS_RDWR, 2, sizeof(RxTxValueInCCC),(u8*)(&clientCharacterCfgUUID), (u8*)(RxTxValueInCCC), 0},
     // Mi 0x95FE
     {2, ATT_PERMISSIONS_READ, 2, 2,(u8*)(&my_primaryServiceUUID), (u8*)(&my_FE95_ServiceUUID), 0},
     {0, ATT_PERMISSIONS_READ, 2, sizeof(my_MiName),(u8*)(&userdesc_UUID), (u8*)(my_MiName), 0},

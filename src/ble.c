@@ -19,27 +19,6 @@ extern uint8_t batVal[1];
 
 RAM uint8_t ble_name[] = {11, 0x09, 'M', 'r', 'M', '_', '0', '0', '0', '0', '0', '0'};
 
-RAM bool show_temp_humi_Mi = true;
-
-RAM uint8_t advertising_data_Mi[] = {
-    21, 0x16, 0x95, 0xfe,  // Description
-    0x50, 0x30,  // Start
-    0x5B, 0x05, // Device ID
-    0x00,  // Counter
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // MAC
-    0x0D, 0x10, 0x04, 0x00, 0x00, 0x00, 0x00,  // Alternating: temp+hump / batt lvl
-};
-
-RAM uint8_t advertising_data[] = {
-    16, 0x16, 0x1a, 0x18,  // Description
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // MAC
-    0xaa, 0xaa,  // Temperature
-    0xbb,  // Humidity
-    0xcc,  // Battery level (%)
-    0xdd, 0xdd,  // Battery level (mV)
-    0x00  // Counter
-};
-
 // BTHome v2 (unencrypted) ADV
 // Includes Flags (recommended) + Service Data (UUID 0xFCD2)
 //
@@ -106,20 +85,6 @@ void init_ble(){
     ble_name[10] = hex_ascii[mac_public[0]>>4];
     ble_name[11] = hex_ascii[mac_public[0] &0x0f];
 
-    advertising_data[4] = mac_public[5];
-    advertising_data[5] = mac_public[4];
-    advertising_data[6] = mac_public[3];
-    advertising_data[7] = mac_public[2];
-    advertising_data[8] = mac_public[1];
-    advertising_data[9] = mac_public[0];
-
-    advertising_data_Mi[9] = mac_public[0];
-    advertising_data_Mi[10] = mac_public[1];
-    advertising_data_Mi[11] = mac_public[2];
-    advertising_data_Mi[12] = mac_public[3];
-    advertising_data_Mi[13] = mac_public[4];
-    advertising_data_Mi[14] = mac_public[5];
-
     // Controller Initialization
     blc_ll_initBasicMCU();
     blc_ll_initStandby_module(mac_public);
@@ -160,53 +125,18 @@ bool ble_get_connected(){
 }
 
 void set_adv_data(int16_t temp, uint16_t humi, uint8_t battery_level, uint16_t battery_mv){
-    if (CONF_ADV_FORMAT == ADV_FORMAT_MI){
-        humi = humi * 10;
+    uint16_t humi_0_01 = humi * 100;
+    int16_t temp_0_01 = temp * 10;
+    advertising_data_BTHome[9]++;
+    advertising_data_BTHome[11] = battery_level;
+    advertising_data_BTHome[13] = (uint8_t)(temp_0_01 & 0xFF);
+    advertising_data_BTHome[14] = (uint8_t)((temp_0_01 >> 8) & 0xFF);
+    advertising_data_BTHome[16] = (uint8_t)(humi_0_01 & 0xFF);
+    advertising_data_BTHome[17] = (uint8_t)((humi_0_01 >> 8) & 0xFF);
+    advertising_data_BTHome[19] = (uint8_t)(battery_mv & 0xFF);
+    advertising_data_BTHome[20] = (uint8_t)((battery_mv >> 8) & 0xFF);
 
-        advertising_data_Mi[8]++;
-
-        if (show_temp_humi_Mi){
-            advertising_data_Mi[15] = 0x0d;
-            advertising_data_Mi[17] = 0x04;
-            advertising_data_Mi[18] = temp&0xff;
-            advertising_data_Mi[19] = temp>>8;
-            advertising_data_Mi[20] = humi&0xff;
-            advertising_data_Mi[21] = humi>>8;
-        }else{
-            advertising_data_Mi[15] = 0x0a;
-            advertising_data_Mi[17] = 0x01;
-            advertising_data_Mi[18] = battery_level;
-            advertising_data_Mi[19] = 0x00;
-            advertising_data_Mi[20] = 0x00;
-            advertising_data_Mi[21] = 0x00;
-        }
-        show_temp_humi_Mi = !show_temp_humi_Mi;
-
-        bls_ll_setAdvData((uint8_t *)advertising_data_Mi, sizeof(advertising_data_Mi));
-    }else if (CONF_ADV_FORMAT == ADV_FORMAT_CUSTOM_ATC){
-        advertising_data[10] = temp>>8;
-        advertising_data[11] = temp&0xff;
-        advertising_data[12] = humi&0xff;
-        advertising_data[13] = battery_level;
-        advertising_data[14] = battery_mv>>8;
-        advertising_data[15] = battery_mv&0xff;
-        advertising_data[16]++;
-
-        bls_ll_setAdvData((uint8_t *)advertising_data, sizeof(advertising_data));
-    }else if (CONF_ADV_FORMAT == ADV_FORMAT_BTHOME_V2){
-        uint16_t humi_0_01 = humi * 100;
-        int16_t temp_0_01 = temp * 10;
-        advertising_data_BTHome[9]++;
-        advertising_data_BTHome[11] = battery_level;
-        advertising_data_BTHome[13] = (uint8_t)(temp_0_01 & 0xFF);
-        advertising_data_BTHome[14] = (uint8_t)((temp_0_01 >> 8) & 0xFF);
-        advertising_data_BTHome[16] = (uint8_t)(humi_0_01 & 0xFF);
-        advertising_data_BTHome[17] = (uint8_t)((humi_0_01 >> 8) & 0xFF);
-        advertising_data_BTHome[19] = (uint8_t)(battery_mv & 0xFF);
-        advertising_data_BTHome[20] = (uint8_t)((battery_mv >> 8) & 0xFF);
-
-        bls_ll_setAdvData((uint8_t *)advertising_data_BTHome, sizeof(advertising_data_BTHome));
-    }
+    bls_ll_setAdvData((uint8_t *)advertising_data_BTHome, sizeof(advertising_data_BTHome));
 }
 
 void ble_send_temp(uint16_t temp){

@@ -29,7 +29,7 @@ kicking a buck to atc1441 if you find the code here valuable.
 Most of the changes are made in the interest of making the FW less cumbersome
 to inspect and modify.
 
-- Added BTHome v2 advertisement format.
+- BTHome v2 is the only supported advertisement format.
 - Made all settings constant & compile-time.
 - Added FW version screen (shown after boot).
 - Removed the advertisement iteration count and alarm thesholds - BLE payload

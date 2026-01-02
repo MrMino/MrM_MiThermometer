@@ -23,9 +23,11 @@
 // Advertising format
 // ADV_FORMAT_CUSTOM_ATC - custom format known from ATC firmware
 // ADV_FORMAT_MI - stock Mi firmware format
+// ADV_FORMAT_BTHOME_V2 - BTHome version 2 format for use with Home Assistant
 #define ADV_FORMAT_CUSTOM_ATC 1
 #define ADV_FORMAT_MI 2
-#define CONF_ADV_FORMAT ADV_FORMAT_CUSTOM_ATC
+#define ADV_FORMAT_BTHOME_V2 3
+#define CONF_ADV_FORMAT ADV_FORMAT_BTHOME_V2
 
 // Advertisement interval - number of main loop iterations between
 // advertisement payload updates

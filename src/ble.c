@@ -193,6 +193,19 @@ void set_adv_data(int16_t temp, uint16_t humi, uint8_t battery_level, uint16_t b
         advertising_data[16]++;
 
         bls_ll_setAdvData((uint8_t *)advertising_data, sizeof(advertising_data));
+    }else if (CONF_ADV_FORMAT == ADV_FORMAT_BTHOME_V2){
+        uint16_t humi_0_01 = humi * 100;
+        int16_t temp_0_01 = temp * 10;
+        advertising_data_BTHome[9]++;
+        advertising_data_BTHome[11] = battery_level;
+        advertising_data_BTHome[13] = (uint8_t)(temp_0_01 & 0xFF);
+        advertising_data_BTHome[14] = (uint8_t)((temp_0_01 >> 8) & 0xFF);
+        advertising_data_BTHome[16] = (uint8_t)(humi_0_01 & 0xFF);
+        advertising_data_BTHome[17] = (uint8_t)((humi_0_01 >> 8) & 0xFF);
+        advertising_data_BTHome[19] = (uint8_t)(battery_mv & 0xFF);
+        advertising_data_BTHome[20] = (uint8_t)((battery_mv >> 8) & 0xFF);
+
+        bls_ll_setAdvData((uint8_t *)advertising_data_BTHome, sizeof(advertising_data_BTHome));
     }
 }
 

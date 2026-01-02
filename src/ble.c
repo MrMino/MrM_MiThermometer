@@ -44,7 +44,7 @@ uint8_t mac_public[6];
 
 void app_switch_to_indirect_adv(uint8_t e, uint8_t *p, int n)
 {
-    bls_ll_setAdvParam(ADVERTISING_INTERVAL, ADVERTISING_INTERVAL+50, ADV_TYPE_CONNECTABLE_UNDIRECTED, OWN_ADDRESS_PUBLIC, 0,  NULL, BLT_ENABLE_ADV_ALL, ADV_FP_NONE);
+    bls_ll_setAdvParam(CONF_ADV_INTERVAL, CONF_ADV_INTERVAL+50, ADV_TYPE_CONNECTABLE_UNDIRECTED, OWN_ADDRESS_PUBLIC, 0, NULL, BLT_ENABLE_ADV_ALL, ADV_FP_NONE);
     bls_ll_setAdvEnable(1);
 }
 
@@ -118,7 +118,7 @@ void init_ble(){
     // User application initialization
     bls_ll_setScanRspData((uint8_t *)ble_name, sizeof(ble_name));
     bls_ll_setAdvParam(
-        ADVERTISING_INTERVAL, ADVERTISING_INTERVAL+50, ADV_TYPE_CONNECTABLE_UNDIRECTED,
+        CONF_ADV_INTERVAL, CONF_ADV_INTERVAL+50, ADV_TYPE_CONNECTABLE_UNDIRECTED,
         OWN_ADDRESS_PUBLIC, 0, NULL, BLT_ENABLE_ADV_ALL, ADV_FP_NONE
     );
     bls_ll_setAdvEnable(1);

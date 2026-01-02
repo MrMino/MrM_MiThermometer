@@ -53,4 +53,7 @@
 #define CONF_TEMP_ALARM 5
 #define CONF_HUMI_ALARM 5
 
+// BLE advertisement interval as given to the Telink BLE stack
+#define CONF_ADV_INTERVAL 3000
+
 #endif

@@ -140,7 +140,7 @@ bool ble_get_connected(){
 }
 
 void set_adv_data(int16_t temp, uint16_t humi, uint8_t battery_level, uint16_t battery_mv){
-    if (CONF_ADV_FORMAT){
+    if (CONF_ADV_FORMAT == ADV_FORMAT_MI){
         humi = humi * 10;
 
         advertising_data_Mi[8]++;
@@ -165,7 +165,7 @@ void set_adv_data(int16_t temp, uint16_t humi, uint8_t battery_level, uint16_t b
         show_temp_humi_Mi = !show_temp_humi_Mi;
 
         bls_ll_setAdvData((uint8_t *)advertising_data_Mi, sizeof(advertising_data_Mi));
-    }else{
+    }else if (CONF_ADV_FORMAT == ADV_FORMAT_CUSTOM_ATC){
         advertising_data[10] = temp>>8;
         advertising_data[11] = temp&0xff;
 

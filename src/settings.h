@@ -27,11 +27,11 @@
 #define CONF_LCD_BATTERY_INDICATOR 0
 
 // Advertising format
-// ADV_FORMAT_CUSTOM - custom format known from ATC firmware
+// ADV_FORMAT_CUSTOM_ATC - custom format known from ATC firmware
 // ADV_FORMAT_MI - stock Mi firmware format
-#define ADV_FORMAT_CUSTOM 0
-#define ADV_FORMAT_MI 1
-#define CONF_ADV_FORMAT ADV_FORMAT_CUSTOM
+#define ADV_FORMAT_CUSTOM_ATC 1
+#define ADV_FORMAT_MI 2
+#define CONF_ADV_FORMAT ADV_FORMAT_CUSTOM_ATC
 
 // Advertisement interval - number of main loop iterations between
 // advertisement payload updates

@@ -3,6 +3,10 @@
 Minimal custom firmware for the Xiaomi Thermometer LYWSD03MMC - fork of [atc1441's
 custom firmware](https://github.com/atc1441/ATC_MiThermometer/).
 
+This firmware turns the device into a passive beacon with no BT connection
+support. It's meant to be used with Home Assistant Passive BLE monitor (the
+integration from HACS).
+
 ## ⚠️ WARNING ️⚠️
 
 ### This firmware **DISABLES OTA FLASHING OF THE DEVICE**.
@@ -10,10 +14,8 @@ custom firmware](https://github.com/atc1441/ATC_MiThermometer/).
 This is deliberate. I don't like having devices that can be remotely
 reprogrammed _by anyone_ without my knowledge.
 
-### This firmware **DISABLES OTA SETTINGS CHANGES**.
-
-Same as above. I find no use for changing the display settings on a device as
-simple as this one, so to make the FW simpler I removed that functionality.
+**You will not be able to reprogram your device with OTA if you use this
+firmware. Only reprogramming via UART will be supported**
 
 ## Support the original creator
 

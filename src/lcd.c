@@ -146,20 +146,6 @@ void show_battery_symbol(bool state){
         display_buff[1] &= ~0x08;
 }
 
-void show_smiley(uint8_t state){/*0=off, 1=happy, 2=sad*/
-    display_buff[2] &= ~0x07;
-    if (state==1)display_buff[2]|=0x05;
-    else if (state==2)display_buff[2]|=0x06;
-}
-
-void show_atc(){
-    send_to_lcd(0x00, 0x00, 0x05, 0xc2, 0xe2, 0x77);
-}
-
-void show_sto(){
-    send_to_lcd(0x00, 0x00, 0x00, 0xc6, 0xe2, 0xb6);
-}
-
 void show_atc_mac(){
     extern u8  mac_public[6];
     send_to_lcd(display_numbers[mac_public[2] &0x0f], display_numbers[mac_public[2]>>4], 0x05, 0xc2, 0xe2, 0x77);

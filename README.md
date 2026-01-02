@@ -41,4 +41,4 @@ To flash the firmware using a UART to USB dongle (CP2102 ones should work):
   - GND pin to the negative battery terminal.
   - VCC pin to the positive battery terminal.
   - TX pin to the P14 pad on the board.
-- Run the flash utility: `python3 flash.py src/mrm_mi_fw.bin`
+- Run the flash utility: `python3 flash.py --file src/mrm_mi_fw.bin`

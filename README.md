@@ -1,6 +1,6 @@
 # MrM_MiThermoemeter
 
-Custom firmware for the Xiaomi Thermometer LYWSD03MMC - fork of [atc1441's
+Minimal custom firmware for the Xiaomi Thermometer LYWSD03MMC - fork of [atc1441's
 custom firmware](https://github.com/atc1441/ATC_MiThermometer/).
 
 ## ⚠️ WARNING ️⚠️

@@ -17,7 +17,7 @@ extern uint8_t my_tempVal[2];
 extern uint8_t my_humiVal[2];
 extern uint8_t my_batVal[1];
 
-RAM uint8_t ble_name[] = {11, 0x09, 'A', 'T', 'C', '_', '0', '0', '0', '0', '0', '0'};
+RAM uint8_t ble_name[] = {11, 0x09, 'M', 'r', 'M', '_', '0', '0', '0', '0', '0', '0'};
 
 RAM bool show_temp_humi_Mi = true;
 

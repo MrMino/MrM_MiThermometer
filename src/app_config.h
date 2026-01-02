@@ -1,9 +1,5 @@
 #pragma once
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
-
 #define CLOCK_SYS_CLOCK_HZ 24000000
 
 #define RAM _attribute_data_retention_ // short version, this is needed to keep the values in ram after sleep
@@ -15,7 +11,3 @@ enum{
 };
 
 #include "vendor/common/default_config.h"
-
-#if defined(__cplusplus)
-}
-#endif

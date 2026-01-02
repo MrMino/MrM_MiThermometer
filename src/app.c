@@ -10,8 +10,6 @@
 #include "sensor.h"
 #include "settings.h"
 
-
-
 RAM uint32_t last_delay = 0xFFFF0000, last_adv_delay = 0xFFFF0000, last_battery_delay = 0xFFFF0000;
 RAM bool last_smiley;
 int16_t temp = 0;
@@ -44,104 +42,104 @@ _attribute_ram_code_ bool is_comfort(int16_t t, uint16_t h) {
     return c;
 }
 
-void user_init_normal(void){//this will get executed one time after power up
-	random_generator_init();  //must
-	init_ble();	
-	init_sensor();
-	init_lcd();	
-	init_flash();
-	show_atc_mac();
-	battery_mv = get_battery_mv();
-	battery_level = get_battery_level(get_battery_mv());
+void user_init_normal(void){
+    random_generator_init();
+    init_ble();
+    init_sensor();
+    init_lcd();
+    init_flash();
+    show_atc_mac();
+    battery_mv = get_battery_mv();
+    battery_level = get_battery_level(get_battery_mv());
 }
 
-_attribute_ram_code_ void user_init_deepRetn(void){//after sleep this will get executed
-	init_lcd_deepsleep();
-	blc_ll_initBasicMCU();
-	rf_set_power_level_index (RF_POWER_P3p01dBm);
-	blc_ll_recoverDeepRetention();
+_attribute_ram_code_ void user_init_deepRetn(void){
+    init_lcd_deepsleep();
+    blc_ll_initBasicMCU();
+    rf_set_power_level_index (RF_POWER_P3p01dBm);
+    blc_ll_recoverDeepRetention();
 }
 
-void main_loop(){	
-	if((clock_time()-last_delay) > 5000*CLOCK_SYS_CLOCK_1MS){//main loop delay
-	
-		if((clock_time()-last_battery_delay) > 5*60000*CLOCK_SYS_CLOCK_1MS){//Read battery delay
-			battery_mv = get_battery_mv();
-			battery_level = get_battery_level(get_battery_mv());
-			last_battery_delay = clock_time();
-		}
+void main_loop(){
+    if ((clock_time()-last_delay) > 5000*CLOCK_SYS_CLOCK_1MS){
 
-		if(meas_count >= CONF_MEASUREMENT_ITERATIONS){
-			read_sensor(&temp,&humi);		
-			temp += CONF_TEMP_OFFSET;
-			humi += CONF_HUMI_OFFSET;
-			meas_count=0;
-		
-			if((temp-last_temp > CONF_TEMP_ALARM)||(last_temp-temp > CONF_TEMP_ALARM)||(humi-last_humi > CONF_HUMI_ALARM)||(last_humi-humi > CONF_HUMI_ALARM)){// instant advertise on to much sensor difference
-				if(CONF_ADV_TEMP_C_OR_F)
-					set_adv_data(((((temp*10)/5)*9)+3200)/10, humi, battery_level, battery_mv);
-				else
-					set_adv_data(temp, humi, battery_level, battery_mv);
-			}
-			last_temp = temp;
-			last_humi = humi;
-		}	
-		meas_count++;
-		
-		if(CONF_LCD_TEMP_C_OR_F){
-			show_temp_symbol(2);
-			show_big_number(((((last_temp*10)/5)*9)+3200)/10,1);//convert C to F
-		}else{
-			show_temp_symbol(1);
-			show_big_number(last_temp,1);
-		}
+        if ((clock_time()-last_battery_delay) > 5*60000*CLOCK_SYS_CLOCK_1MS){
+            battery_mv = get_battery_mv();
+            battery_level = get_battery_level(get_battery_mv());
+            last_battery_delay = clock_time();
+        }
 
-		if(!CONF_LCD_BATTERY_INDICATOR) show_batt_or_humi = true;
-		
-		if(show_batt_or_humi){//Change between Humidity displaying and battery level if show_batt_enabled=true
-			show_small_number(last_humi,1);	
-		    show_battery_symbol(0);   
-		}else{
-			show_small_number((battery_level==100)?99:battery_level,1);
-			show_battery_symbol(1);
-		}
-		
-		show_batt_or_humi = !show_batt_or_humi;
-		
-		if(ble_get_connected()){//If connected notify Sensor data
-			ble_send_temp(last_temp);
-			ble_send_humi(last_humi);
-			ble_send_battery(battery_level);
-		}
+        if (meas_count >= CONF_MEASUREMENT_ITERATIONS){
+            read_sensor(&temp, &humi);
+            temp += CONF_TEMP_OFFSET;
+            humi += CONF_HUMI_OFFSET;
+            meas_count=0;
 
-		if((clock_time() - last_adv_delay) > (CONF_ADV_FORMAT?5000:10000)*CLOCK_SYS_CLOCK_1MS){//Advetise data delay
-		    if(adv_count >= CONF_ADV_ITERATIONS){
-				if(CONF_ADV_TEMP_C_OR_F)
-					set_adv_data(((((last_temp*10)/5)*9)+3200)/10, last_humi, battery_level, battery_mv);
-				else
-					set_adv_data(last_temp, last_humi, battery_level, battery_mv);
-			last_adv_delay = clock_time();
-			adv_count=0;
-		    }
-		    adv_count++;
-		}
-		
-		if(CONF_LCD_SHOW_COMFORT_SMILEY) {
-			if(is_comfort(last_temp * 10, last_humi * 100)){
-				show_smiley(1);
-			} else {
-				show_smiley(2);
-			}
-		}
+            if ((temp-last_temp > CONF_TEMP_ALARM)||(last_temp-temp > CONF_TEMP_ALARM)||(humi-last_humi > CONF_HUMI_ALARM)||(last_humi-humi > CONF_HUMI_ALARM)){
+                if (CONF_ADV_TEMP_C_OR_F)
+                    set_adv_data(((((temp*10)/5)*9)+3200)/10, humi, battery_level, battery_mv);
+                else
+                    set_adv_data(temp, humi, battery_level, battery_mv);
+            }
+            last_temp = temp;
+            last_humi = humi;
+        }
+        meas_count++;
 
-		if(CONF_LCD_BLINKING_SMILEY){//If Smiley should blink do it
-		last_smiley=!last_smiley;
-		show_smiley(last_smiley);
-		}
-		
-		update_lcd();
-		last_delay = clock_time();
-	}
-	blt_sdk_main_loop();
-	blt_pm_proc();	
+        if (CONF_LCD_TEMP_C_OR_F){
+            show_temp_symbol(2);
+            show_big_number(((((last_temp*10)/5)*9)+3200)/10, 1);
+        }else{
+            show_temp_symbol(1);
+            show_big_number(last_temp, 1);
+        }
+
+        if (!CONF_LCD_BATTERY_INDICATOR) show_batt_or_humi = true;
+
+        if (show_batt_or_humi){
+            show_small_number(last_humi, 1);
+            show_battery_symbol(0);
+        }else{
+            show_small_number(((battery_level==100) ? 99 : battery_level), 1);
+            show_battery_symbol(1);
+        }
+
+        show_batt_or_humi = !show_batt_or_humi;
+
+        if (ble_get_connected()){
+            ble_send_temp(last_temp);
+            ble_send_humi(last_humi);
+            ble_send_battery(battery_level);
+        }
+
+        if ((clock_time() - last_adv_delay) > (CONF_ADV_FORMAT?5000:10000)*CLOCK_SYS_CLOCK_1MS){
+            if (adv_count >= CONF_ADV_ITERATIONS){
+                if (CONF_ADV_TEMP_C_OR_F)
+                    set_adv_data(((((last_temp*10)/5)*9)+3200)/10, last_humi, battery_level, battery_mv);
+                else
+                    set_adv_data(last_temp, last_humi, battery_level, battery_mv);
+            last_adv_delay = clock_time();
+            adv_count=0;
+            }
+            adv_count++;
+        }
+
+        if (CONF_LCD_SHOW_COMFORT_SMILEY) {
+            if (is_comfort(last_temp * 10, last_humi * 100)){
+                show_smiley(1);
+            } else {
+                show_smiley(2);
+            }
+        }
+
+        if (CONF_LCD_BLINKING_SMILEY){
+            last_smiley=!last_smiley;
+            show_smiley(last_smiley);
+        }
+
+        update_lcd();
+        last_delay = clock_time();
+    }
+    blt_sdk_main_loop();
+    blt_pm_proc();
 }

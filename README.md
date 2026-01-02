@@ -39,7 +39,7 @@ to inspect and modify.
 - Reduced BLE advertisements without payload changes to lower airtime and power usage.
 - Removed all ATT services, including OTA and ATC RxTx (remote settings update).
 - Removed the "smiley face" from LCD (cause it's janky).
-- Better & cleaner Python flasher.
+- Cleaner Python flasher.
 - BLEMonitor script.
 - Codebase cleanup.
 

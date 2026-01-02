@@ -31,6 +31,6 @@
 #define CONF_HUMI_OFFSET 0
 
 // BLE advertisement interval as given to the Telink BLE stack
-#define CONF_ADV_INTERVAL 7250
+#define CONF_ADV_INTERVAL 10000
 
 #endif

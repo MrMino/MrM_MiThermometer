@@ -32,6 +32,7 @@ void user_init_normal(void){
     init_lcd();
     init_flash();
     show_atc_mac();
+    show_fw_version();
     battery_mv = get_battery_mv();
     battery_level = get_battery_level(get_battery_mv());
 }

@@ -1,6 +1,10 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+// FW version shown on the LCD after boot
+#define FW_VERSION_A 0
+#define FW_VERSION_B 1
+
 // LCD temperature value in Celsius or Fahrenheit
 // 0 - Celsius
 // 1 - Fahrenheit

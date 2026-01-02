@@ -7,6 +7,7 @@
 
 #include "i2c.h"
 #include "lcd.h"
+#include "settings.h"
 
 #define pm_wait_ms(t) cpu_stall_wakeup_by_timer0(t*CLOCK_SYS_CLOCK_1MS);
 
@@ -171,6 +172,11 @@ void show_atc_mac(){
     send_to_lcd(0x00, 0x00, 0x05, 0xc2, 0xe2, 0x77);
     pm_wait_ms(200);
     send_to_lcd(display_numbers[mac_public[0] &0x0f], display_numbers[mac_public[0]>>4], 0x05, 0xc2, 0xe2, 0x77);
+    pm_wait_ms(1800);
+}
+
+void show_fw_version(){
+    send_to_lcd(display_numbers[FW_VERSION_B],display_numbers[FW_VERSION_A],0x04,0x46,0x42,0x46);
     pm_wait_ms(1800);
 }
 

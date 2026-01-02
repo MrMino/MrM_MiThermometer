@@ -37,8 +37,7 @@ to inspect and modify.
 - Removed the advertisement iteration count and alarm thesholds - BLE payload
   update happens on measurement, which had the higher iteration interval anyway.
 - Reduced BLE advertisements without payload changes to lower airtime and power usage.
-- Removed OTA updates.
-- Removed RxTx ATT service (settings update OTA).
+- Removed all ATT services, including OTA and ATC RxTx (remote settings update).
 - Removed the "smiley face" from LCD (cause it's janky).
 - Better & cleaner Python flasher.
 - BLEMonitor script.

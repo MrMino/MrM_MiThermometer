@@ -41,14 +41,12 @@ _attribute_ram_code_ uint16_t get_battery_mv()
 
     uint16_t adc_sample[8] = {0};
     u32 adc_result;
-    for(i=0;i<8;i++){
-        adc_dat_buf[i] = 0;
-    }
+    for (i = 0; i < 8; i++) adc_dat_buf[i] = 0;
     while (!clock_time_exceed(t0, 25));
-    adc_config_misc_channel_buf((uint16_t *)adc_dat_buf, 8<<2);
+    adc_config_misc_channel_buf((uint16_t *)adc_dat_buf, 8 << 2);
     dfifo_enable_dfifo2();
 
-    for(i=0;i<8;i++){
+    for (i = 0; i < 8; i++){
         while (!adc_dat_buf[i]);
         if (adc_dat_buf[i] & BIT(13)){
             adc_sample[i] = 0;
@@ -60,25 +58,25 @@ _attribute_ram_code_ uint16_t get_battery_mv()
             if (adc_sample[i] < adc_sample[i-1]){
                 temp = adc_sample[i];
                 adc_sample[i] = adc_sample[i-1];
-                for(j=i-1;j>=0 && adc_sample[j] > temp;j--){
+                for (j = i - 1; j >= 0 && adc_sample[j] > temp; j--){
                     adc_sample[j+1] = adc_sample[j];
                 }
                 adc_sample[j+1] = temp;
             }
         }
     }
-    dfifo_disable_dfifo2();
-    u32 adc_average = (adc_sample[2] + adc_sample[3] + adc_sample[4] + adc_sample[5])/4;
-    adc_result = adc_average;
-    batt_vol_mv  = (adc_result * adc_vref_cfg.adc_vref)>>10;
 
+    dfifo_disable_dfifo2();
+    u32 adc_average = (adc_sample[2] + adc_sample[3] + adc_sample[4] + adc_sample[5]) / 4;
+    adc_result = adc_average;
+    batt_vol_mv  = (adc_result * adc_vref_cfg.adc_vref) >> 10;
 
     return batt_vol_mv;
 }
 
 uint8_t get_battery_level(uint16_t battery_mv){
-    uint8_t battery_level = (battery_mv-2200)/(31-22);
-    if (battery_level>100) battery_level=100;
-    if (battery_mv<2200) battery_level=0;
+    uint8_t battery_level = (battery_mv - 2200) / (31 - 22);
+    if (battery_level > 100) battery_level = 100;
+    if (battery_mv < 2200) battery_level = 0;
     return battery_level;
 }

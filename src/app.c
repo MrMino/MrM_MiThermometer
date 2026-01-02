@@ -54,7 +54,7 @@ void main_loop(){
             read_sensor(&temp, &humi);
             temp += CONF_TEMP_OFFSET;
             humi += CONF_HUMI_OFFSET;
-            meas_count=0;
+            meas_count = 0;
 
             if (temp != last_temp || humi != last_humi){
                 if (CONF_ADV_TEMP_C_OR_F)
@@ -81,7 +81,7 @@ void main_loop(){
             show_small_number(last_humi, 1);
             show_battery_symbol(0);
         }else{
-            show_small_number(((battery_level==100) ? 99 : battery_level), 1);
+            show_small_number(((battery_level == 100) ? 99 : battery_level), 1);
             show_battery_symbol(1);
         }
 

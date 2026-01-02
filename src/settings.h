@@ -31,7 +31,7 @@
 
 // Measurement interval - number of main loop iterations between sensor
 // measurements
-#define CONF_MEASUREMENT_ITERATIONS 10
+#define CONF_MEASUREMENT_ITERATIONS 4
 
 // Temperature and humidity offsets - values that will be added to the sensor
 // measurements. Use to callibrate the sensors if needed.
@@ -40,6 +40,6 @@
 #define CONF_HUMI_OFFSET 0
 
 // BLE advertisement interval as given to the Telink BLE stack
-#define CONF_ADV_INTERVAL 3000
+#define CONF_ADV_INTERVAL 7250
 
 #endif

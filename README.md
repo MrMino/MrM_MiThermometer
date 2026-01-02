@@ -34,6 +34,7 @@ to inspect and modify.
 - Added FW version screen (shown after boot).
 - Removed the advertisement iteration count and alarm thesholds - BLE payload
   update happens on measurement, which had the higher iteration interval anyway.
+- Reduced BLE advertisements without payload changes to lower airtime and power usage.
 - Removed OTA updates.
 - Removed RxTx ATT service (settings update OTA).
 - Removed the "smiley face" from LCD (cause it's janky).

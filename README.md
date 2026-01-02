@@ -32,6 +32,8 @@ to inspect and modify.
 - Added BTHome v2 advertisement format.
 - Made all settings constant & compile-time.
 - Added FW version screen (shown after boot).
+- Removed the advertisement iteration count and alarm thesholds - BLE payload
+  update happens on measurement, which had the higher iteration interval anyway.
 - Removed OTA updates.
 - Removed RxTx ATT service (settings update OTA).
 - Removed the "smiley face" from LCD (cause it's janky).

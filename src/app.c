@@ -10,7 +10,7 @@
 #include "sensor.h"
 #include "settings.h"
 
-RAM uint32_t last_delay = 0xFFFF0000, last_adv_delay = 0xFFFF0000, last_battery_delay = 0xFFFF0000;
+RAM uint32_t last_delay = 0xFFFF0000, last_battery_delay = 0xFFFF0000;
 RAM bool last_smiley;
 int16_t temp = 0;
 uint16_t humi = 0;
@@ -59,14 +59,14 @@ void main_loop(){
             humi += CONF_HUMI_OFFSET;
             meas_count=0;
 
-            if ((temp-last_temp > CONF_TEMP_ALARM)||(last_temp-temp > CONF_TEMP_ALARM)||(humi-last_humi > CONF_HUMI_ALARM)||(last_humi-humi > CONF_HUMI_ALARM)){
+            if (temp != last_temp || humi != last_humi){
                 if (CONF_ADV_TEMP_C_OR_F)
                     set_adv_data(((((temp*10)/5)*9)+3200)/10, humi, battery_level, battery_mv);
                 else
                     set_adv_data(temp, humi, battery_level, battery_mv);
+                last_temp = temp;
+                last_humi = humi;
             }
-            last_temp = temp;
-            last_humi = humi;
         }
         meas_count++;
 
@@ -94,18 +94,6 @@ void main_loop(){
             ble_send_temp(last_temp);
             ble_send_humi(last_humi);
             ble_send_battery(battery_level);
-        }
-
-        if ((clock_time() - last_adv_delay) > (CONF_ADV_FORMAT == ADV_FORMAT_MI ? 5000 : 10000) * CLOCK_SYS_CLOCK_1MS){
-            if (adv_count >= CONF_ADV_ITERATIONS){
-                if (CONF_ADV_TEMP_C_OR_F)
-                    set_adv_data(((((last_temp*10)/5)*9)+3200)/10, last_humi, battery_level, battery_mv);
-                else
-                    set_adv_data(last_temp, last_humi, battery_level, battery_mv);
-            last_adv_delay = clock_time();
-            adv_count=0;
-            }
-            adv_count++;
         }
 
         update_lcd();

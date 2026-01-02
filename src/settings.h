@@ -29,10 +29,6 @@
 #define ADV_FORMAT_BTHOME_V2 3
 #define CONF_ADV_FORMAT ADV_FORMAT_BTHOME_V2
 
-// Advertisement interval - number of main loop iterations between
-// advertisement payload updates
-#define CONF_ADV_ITERATIONS 6
-
 // Measurement interval - number of main loop iterations between sensor
 // measurements
 #define CONF_MEASUREMENT_ITERATIONS 10
@@ -42,12 +38,6 @@
 // Units: temperature: 0.1C; humidity: 0.1%.
 #define CONF_TEMP_OFFSET 0
 #define CONF_HUMI_OFFSET 0
-
-// Instant advertisement payload update thresholds. If the sensor value delta
-// is larger than this, the measurement triggers instant payload update.
-// Units: temperature: 0.1C; humidity: 0.1%.
-#define CONF_TEMP_ALARM 5
-#define CONF_HUMI_ALARM 5
 
 // BLE advertisement interval as given to the Telink BLE stack
 #define CONF_ADV_INTERVAL 3000

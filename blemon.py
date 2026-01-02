@@ -83,7 +83,7 @@ if len(sys.argv) == 1:
 else:
 
     def mac_filter(mac: str) -> bool:
-        return mac == sys.argv[1]
+        return mac in {arg.strip().upper() for arg in sys.argv[1:]}
 
 
 async def main():

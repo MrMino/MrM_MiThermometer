@@ -24,7 +24,7 @@ This is the link to the donations atc1441 had in their repo:
 > https://paypal.me/hoverboard1
 
 The original firmware a cool piece of hardware reverse engineering. Consider
-kicking a buck to atc1441 if you find the code here valuable.
+giving back to atc1441 if you find the code here valuable.
 
 ## Changes from the atc1441 version:
 
